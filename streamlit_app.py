@@ -16,42 +16,95 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling
+# Custom Styling & High-Contrast Typography Overrides
 st.markdown("""
     <style>
-    .main {
-        background-color: #090d16;
-        color: #f8fafc;
-    }
+    /* Global Base */
     .stApp {
-        background-color: #090d16;
+        background-color: #090d16 !important;
+        color: #ffffff !important;
     }
+    
+    /* Headings & Text High-Contrast */
+    h1, h2, h3, h4, h5, h6 {
+        color: #ffffff !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+    
+    p, span, label, div {
+        color: #e2e8f0 !important;
+    }
+    
+    .stCaption, [data-testid="stCaptionContainer"] {
+        color: #cbd5e1 !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* File Uploader Text & Container */
+    [data-testid="stFileUploader"] {
+        background-color: rgba(18, 26, 43, 0.8) !important;
+        border: 2px dashed rgba(99, 102, 241, 0.4) !important;
+        border-radius: 16px !important;
+        padding: 1rem !important;
+    }
+
+    [data-testid="stFileUploader"] * {
+        color: #f8fafc !important;
+    }
+
+    /* Info Alert Container */
+    [data-testid="stNotification"] {
+        background-color: rgba(99, 102, 241, 0.15) !important;
+        border: 1px solid rgba(99, 102, 241, 0.4) !important;
+        border-radius: 14px !important;
+    }
+
+    [data-testid="stNotification"] p {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    /* Metric & Result Cards */
     .metric-card {
         background: rgba(18, 26, 43, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 16px;
         padding: 1.5rem;
         box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
+
     .healthy-banner {
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid rgba(16, 185, 129, 0.4);
-        color: #10b981;
+        background: rgba(16, 185, 129, 0.25);
+        border: 2px solid #10b981;
+        color: #ffffff !important;
         padding: 1.25rem;
         border-radius: 14px;
-        font-weight: 700;
-        font-size: 1.5rem;
+        font-weight: 800;
+        font-size: 1.6rem;
         text-align: center;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
+
     .coccidiosis-banner {
-        background: rgba(239, 68, 68, 0.15);
-        border: 1px solid rgba(239, 68, 68, 0.4);
-        color: #ef4444;
+        background: rgba(239, 68, 68, 0.25);
+        border: 2px solid #ef4444;
+        color: #ffffff !important;
         padding: 1.25rem;
         border-radius: 14px;
-        font-weight: 700;
-        font-size: 1.5rem;
+        font-weight: 800;
+        font-size: 1.6rem;
         text-align: center;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    /* Sidebar Styling */
+    [data-testid="stSidebar"] {
+        background-color: #0d1322 !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    [data-testid="stSidebar"] * {
+        color: #f1f5f9 !important;
     }
     </style>
 """, unsafe_allow_html=True)
