@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicken Disease Classifier | Deep Learning MLOps Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: rgba(18, 26, 43, 0.75);
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.12) 0%, transparent 45%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-glass);
+            backdrop-filter: blur(12px);
+            background: rgba(9, 13, 22, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.4rem;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .brand-text h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .badge-mlops {
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-mlops i {
+            font-size: 0.7rem;
+            color: var(--accent-green);
+        }
+
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .hero h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 968px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        /* Dropzone */
+        .dropzone-area {
+            border: 2px dashed rgba(99, 102, 241, 0.35);
+            border-radius: 18px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 23, 42, 0.4);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropzone-area:hover, .dropzone-area.dragover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .dropzone-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .dropzone-text h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .dropzone-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .preview-container {
+            width: 100%;
+            height: 240px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            display: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(9, 13, 22, 0.9), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.85rem 1.75rem;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .btn-full {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* Result Panel */
+        .result-placeholder {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            border: 1px dashed var(--border-glass);
+            border-radius: 18px;
+            color: var(--text-muted);
+        }
+
+        .result-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        .result-body {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .prediction-badge {
+            padding: 1.25rem 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .prediction-badge.healthy {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+
+        .prediction-badge.coccidiosis {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--accent-red);
+        }
+
+        .pred-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .pred-status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.3rem 0.75rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .confidence-meter {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 1.25rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-glass);
+        }
+
+        .meter-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .progress-bar-bg {
+            height: 10px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 9999px;
+            background: var(--primary-gradient);
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+
+        .dvc-stages {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .dvc-stages {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stage-box {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stage-box i {
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .stage-box h5 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .stage-box span {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        footer {
+            border-top: 1px solid var(--border-glass);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="#" class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-feather-pointed"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>PoultryHealth AI</h1>
+                    <p>MLOps & Deep Learning Diagnostic Suite</p>
+                </div>
+            </a>
+            <div class="badge-mlops">
+                <i class="fa-solid fa-circle"></i> DVC Pipeline Ready
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h2>Chicken Disease Classification</h2>
+            <p>Automated fecal image diagnostics powered by VGG16 Transfer Learning and tracked with Data Version Control (DVC).</p>
+        </div>
+
+        <div class="grid-container">
+            <!-- Left Card: Input Image -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <span>Upload Fecal Image</span>
+                    </div>
+                </div>
+
+                <div class="dropzone-area" id="dropzone">
+                    <div class="dropzone-icon">
+                        <i class="fa-solid fa-image"></i>
+                    </div>
+                    <div class="dropzone-text">
+                        <h4>Drag & Drop image here</h4>
+                        <p>Supports JPG, JPEG, PNG formats</p>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*">
+                </div>
+
+                <div class="preview-container" id="previewContainer">
+                    <img id="imagePreview" src="" alt="Selected Fecal Sample">
+                    <div class="preview-overlay">
+                        <span style="font-size:0.85rem; color:#fff;" id="fileNameSpan">sample.jpg</span>
+                        <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.75rem;" id="changeFileBtn">Change</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-full" id="predictBtn" disabled>
+                    <i class="fa-solid fa-microscope"></i> Run Diagnosis
+                </button>
+            </div>
+
+            <!-- Right Card: Diagnostics Output -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Diagnostic Results</span>
+                    </div>
+                </div>
+
+                <div class="result-placeholder" id="resultPlaceholder">
+                    <i class="fa-solid fa-dna"></i>
+                    <p>Upload a chicken fecal image and click "Run Diagnosis" to analyze health conditions.</p>
+                </div>
+
+                <div class="result-body" id="resultBody">
+                    <div class="prediction-badge healthy" id="predBadge">
+                        <div>
+                            <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; opacity:0.8;">Detected Condition</span>
+                            <div class="pred-label" id="predLabel">Healthy</div>
+                        </div>
+                        <div class="pred-status" id="predStatus">Normal</div>
+                    </div>
+
+                    <div class="confidence-meter">
+                        <div class="meter-header">
+                            <span>Diagnostic Confidence</span>
+                            <span id="confidenceVal">95.4%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.03); padding:1.25rem; border-radius:16px; border:1px solid var(--border-glass);">
+                        <h4 style="font-size:0.9rem; font-weight:600; margin-bottom:0.5rem;"><i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> Health Advisory</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;" id="advisoryText">
+                            No signs of Coccidiosis parasitic infection detected. Maintain standard poultry sanitation protocols.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MLOps Pipeline Stage Indicators -->
+        <div class="dvc-stages">
+            <div class="stage-box">
+                <i class="fa-solid fa-download"></i>
+                <h5>1. Data Ingestion</h5>
+                <span>Artifact Zip Extracted</span>
+            </div>
+            <div class="stage-box">
+                <i class="fa-solid fa-layer-group"></i>
+                <h5>2. Base Model</h5>
+                <span>VGG16 Architecture</span>
+            </div>
+            <div class="stage-box">
+                <i class="fa-solid fa-brain"></i>
+                <h5>3. Model Training</h5>
+                <span>Transfer Learning</span>
+            </div>
+            <div class="stage-box">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <h5>4. Evaluation</h5>
+                <span>Scores & Metrics</span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PoultryHealth AI &bull; Built with TensorFlow, DVC, Flask & Docker for Portfolio</p>
+    </footer>
+
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const fileNameSpan = document.getElementById('fileNameSpan');
+        const changeFileBtn = document.getElementById('changeFileBtn');
+        const predictBtn = document.getElementById('predictBtn');
+        const resultPlaceholder = document.getElementById('resultPlaceholder');
+        const resultBody = document.getElementById('resultBody');
+        const predBadge = document.getElementById('predBadge');
+        const predLabel = document.getElementById('predLabel');
+        const predStatus = document.getElementById('predStatus');
+        const confidenceVal = document.getElementById('confidenceVal');
+        const progressFill = document.getElementById('progressFill');
+        const advisoryText = document.getElementById('advisoryText');
+
+        let base64Image = "";
+
+        dropzone.addEventListener('click', () => fileInput.click());
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        changeFileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fileInput.click();
+        });
+
+        function handleFile(file) {
+            fileNameSpan.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                base64Image = e.target.result.split(',')[1];
+                dropzone.style.display = 'none';
+                previewContainer.style.display = 'block';
+                predictBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        predictBtn.addEventListener('click', async () => {
+            predictBtn.disabled = true;
+            predictBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...`;
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: base64Image })
+                });
+
+                const data = await response.json();
+                const res = data[0] || data;
+
+                resultPlaceholder.style.display = 'none';
+                resultBody.style.display = 'flex';
+
+                const pred = res.prediction || res.image || "Healthy";
+                const confPercent = Math.round((res.confidence || 0.95) * 100);
+
+                predLabel.textContent = pred;
+                confidenceVal.textContent = confPercent + '%';
+                progressFill.style.width = confPercent + '%';
+
+                if (pred.toLowerCase() === 'healthy') {
+                    predBadge.className = 'prediction-badge healthy';
+                    predStatus.textContent = 'Normal Health';
+                    advisoryText.textContent = 'No signs of Coccidiosis parasitic infection detected. Maintain standard poultry hygiene and regular monitoring.';
+                } else {
+                    predBadge.className = 'prediction-badge coccidiosis';
+                    predStatus.textContent = 'Infection Warning';
+                    advisoryText.textContent = 'Potential Coccidiosis detected! Isolate affected flock members and initiate veterinary anticoccidial treatment immediately.';
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert('Prediction failed. Please try again.');
+            } finally {
+                predictBtn.disabled = false;
+                predictBtn.innerHTML = `<i class="fa-solid fa-microscope"></i> Run Diagnosis`;
+            }
+        });
+    </script>
+</body>
+</html>
