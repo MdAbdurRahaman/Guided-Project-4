@@ -3,11 +3,12 @@
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://tensorflow.org/)
 [![DVC](https://img.shields.io/badge/DVC-Pipeline-violet.svg)](https://dvc.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Deployment-red.svg)](https://streamlit.io/)
 [![Flask](https://img.shields.io/badge/Flask-Web%20UI-green.svg)](https://flask.palletsprojects.org/)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-blue)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 
-An end-to-end, production-ready Deep Learning & MLOps application built to classify chicken fecal images as **Coccidiosis** or **Healthy**. This repository demonstrates a complete machine learning lifecycle—from dataset ingestion and transfer learning model training to Data Version Control (**DVC**) pipeline tracking, Flask web app deployment, Docker containerization, and GitHub Actions CI/CD automation.
+An end-to-end, production-ready Deep Learning & MLOps application built to classify chicken fecal images as **Coccidiosis** or **Healthy**. This repository demonstrates a complete machine learning lifecycle—from dataset ingestion and transfer learning model training to Data Version Control (**DVC**) pipeline tracking, Streamlit interactive app, Flask REST web service, Docker containerization, and GitHub Actions CI/CD automation.
 
 ---
 
@@ -52,7 +53,7 @@ This project delivers an automated visual diagnostic solution powered by a fine-
                                           │
                                           ▼
 ┌────────────────────────┐    ┌────────────────────────┐
-│  Docker Container      │◄───┤ Flask Web Interface    │
+│  Docker Container      │◄───┤  Streamlit & Flask Apps│
 │  & AWS/Azure Deploy    │    │ (Diagnosis & Feedback) │
 └────────────────────────┘    └────────────────────────┘
 ```
@@ -63,7 +64,7 @@ This project delivers an automated visual diagnostic solution powered by a fine-
 
 - **Deep Learning**: TensorFlow / Keras (VGG16 Architecture)
 - **MLOps & Versioning**: DVC (Data Version Control)
-- **Web Interface**: Flask, HTML5, Vanilla CSS Glassmorphic UI
+- **Deployment & UI**: Streamlit App & Flask REST UI
 - **Package Management**: Setuptools, Python-Box, PyYAML
 - **Containerization**: Docker
 - **CI/CD Pipeline**: GitHub Actions & AWS ECR / EC2
@@ -101,6 +102,7 @@ This project delivers an automated visual diagnostic solution powered by a fine-
 ├── templates/               # Web UI template
 │   └── index.html
 ├── app.py                   # Flask server application entry point
+├── streamlit_app.py         # Streamlit interactive application
 ├── Dockerfile               # Containerization specification
 ├── dvc.yaml                 # DVC pipeline stages tracking definition
 ├── main.py                  # Orchestration script for all pipeline stages
@@ -112,12 +114,12 @@ This project delivers an automated visual diagnostic solution powered by a fine-
 
 ---
 
-## 🚀 Quick Start & Installation
+## 🚀 Quick Start & Deployment
 
 ### 1. Clone Repository & Setup Environment
 ```bash
-git clone https://github.com/your-username/Chicken-Disease-Classification-Project.git
-cd Chicken-Disease-Classification-Project
+git clone https://github.com/MdAbdurRahaman/Guided-Project-4.git
+cd Guided-Project-4
 ```
 
 ### 2. Create Virtual Environment
@@ -144,11 +146,15 @@ dvc repro
 python main.py
 ```
 
-### 5. Launch Web Application
+### 5. Launch Streamlit Application
+```bash
+streamlit run streamlit_app.py
+```
+
+### 6. Launch Flask Web Application
 ```bash
 python app.py
 ```
-Open your browser and navigate to `http://localhost:8080`.
 
 ---
 
